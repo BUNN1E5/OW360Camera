@@ -1,0 +1,5 @@
+﻿<Project>
+  <PropertyGroup>
+    <OutputPath>$(HOME)/.steam/steam/steamapps/compatdata/2416988724/pfx/drive_c/users/steamuser/AppData/Roaming/OuterWildsModManager/OWML/Mods/BUNN1E5.OW360Camera</OutputPath>
+  </PropertyGroup>
+</Project>

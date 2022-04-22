@@ -1,0 +1,8 @@
+{
+  "enabled": true,
+  "settings": {
+    "Resolution": 2048,
+    "SavePath": "/home/jacob/Pictures/",
+    "MaxGPUMemoryUsage (MB)": "4000"
+  }
+}

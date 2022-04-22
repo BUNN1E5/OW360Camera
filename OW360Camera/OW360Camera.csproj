@@ -24,6 +24,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ModTemplate.csproj.user" />
+    <Content Include="OW360Camera.csproj.user" />
   </ItemGroup>
 </Project>
