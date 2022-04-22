@@ -21,6 +21,8 @@ namespace OW360Camera
                 return _camera;
             }
         }
+
+        private Key screenshotKey;
         
         private RenderTexture CubeMap;
         private void Start(){
@@ -29,8 +31,9 @@ namespace OW360Camera
             }
             
             ModHelper.Console.WriteLine($"{nameof(OW360Camera)} is loaded!", MessageType.Success);
-
-
+            
+            screenshotKey = (Key) System.Enum.Parse(typeof(Key), ModHelper.Config.GetSettingsValue<string>("ScreenshotKey"));
+            
             int resolution = Utils.NearestPowerOfTwo(ModHelper.Config.GetSettingsValue<int>("Resolution"));
             ModHelper.Console.WriteLine("Nearest power of 2 is " + resolution, MessageType.Info);
 
@@ -57,11 +60,19 @@ namespace OW360Camera
         }
         
         private void Update() {
-            if (GetKeyDown(Key.M)) {
+            if (GetKeyDown(screenshotKey)) {
                 PreCapture();
                 ScreenShot();
                 PostCapture();
             }
+        }
+
+        private void CaptureEquirect()
+        {
+            ModHelper.Console.WriteLine("Taking 360 ScreenShot", MessageType.Success);
+            camera.RenderToCubemap(CubeMap);
+            //RenderTexture equirect = new RenderTexture(CubeMap.width, CubeMap.height/2, 24, RenderTextureFormat.ARGB32);
+            //CubeMap.ConvertToEquirect(equirect);
         }
 
         private void PreCapture() {
@@ -94,7 +105,7 @@ namespace OW360Camera
             RenderTexture.active = _old;
             equirect.Release();
 
-            byte[] bytes = screenshot.EncodeToJPG();
+            byte[] bytes = screenshot.EncodeToPNG();
             string path = ModHelper.Config.GetSettingsValue<string>("SavePath") + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".png";
             File.WriteAllBytes(path, bytes);
             

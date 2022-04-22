@@ -1,8 +1,9 @@
 {
   "enabled": true,
   "settings": {
+    "ScreenshotKey" : "V",
     "Resolution": 2048,
-    "SavePath": "/home/jacob/Pictures/",
+    "SavePath": "./Pictures/",
     "MaxGPUMemoryUsage (MB)": "4000"
   }
 }
