@@ -128,8 +128,11 @@ namespace OW360Camera
             RenderTexture.active = _old;
             equirect.Release();
 
-            byte[] bytes = screenshot.EncodeToJPG();
-            string path = ModHelper.Config.GetSettingsValue<string>("SavePath") + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".jpg";
+            byte[] bytes = screenshot.EncodeToPNG();
+            string directory = ModHelper.Config.GetSettingsValue<string>("SavePath");
+            string path = directory + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".png";
+            if (!Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
             File.WriteAllBytes(path, bytes);
             
             ModHelper.Console.WriteLine("Saved ScreenShot to " + path, MessageType.Success);
