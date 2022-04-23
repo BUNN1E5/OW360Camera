@@ -1,7 +1,8 @@
 {
   "enabled": true,
   "settings": {
-    "ScreenshotKey" : "V",
+    "ScreenshotKey" : "C",
+    "VideoKey" : "V",
     "Resolution": 2048,
     "SavePath": "./Pictures/",
     "MaxGPUMemoryUsage (MB)": "4000"
