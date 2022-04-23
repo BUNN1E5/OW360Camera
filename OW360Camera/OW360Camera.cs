@@ -71,30 +71,20 @@ namespace OW360Camera
 
 
         private bool toggle = false;
-        private void Update() {
-            if (GetKeyDown(screenshotKey)) {
+
+        private void OnPostRender(){
+            if (GetKeyDown(screenshotKey)){
                 PreCapture();
-                ScreenShot();
+                initializeCubeMap();
+                if (ModHelper.Config.GetSettingsValue<bool>("Left Eye")){
+                    ScreenShot(Camera.MonoOrStereoscopicEye.Left);
+                }
+                
+                if (ModHelper.Config.GetSettingsValue<bool>("Right Eye")){
+                    ScreenShot(Camera.MonoOrStereoscopicEye.Right);
+                }
                 PostCapture();
             }
-            
-            if (GetKeyDown(videoKey)) {
-                CaptureEquirect();
-            }
-        }
-
-        private void CaptureEquirect()
-        {
-            ModHelper.Console.WriteLine("Adding Camera", MessageType.Success);
-            Camera cam = new GameObject().AddComponent<Camera>();
-            cam.transform.parent = camera.transform;
-            cam.transform.localPosition = Vector3.zero;
-            cam.CopyFrom(camera);
-
-            //ModHelper.Console.WriteLine("Taking 360 ScreenShot", MessageType.Success);
-            //camera.RenderToCubemap(CubeMap);
-            //RenderTexture equirect = new RenderTexture(CubeMap.width, CubeMap.height/2, 16, RenderTextureFormat.ARGB32);
-            //CubeMap.ConvertToEquirect(equirect);
         }
 
         private void PreCapture() {
@@ -111,10 +101,10 @@ namespace OW360Camera
             GUIMode.SetRenderMode(GUIMode.RenderMode.FPS);
         }
 
-        private void ScreenShot() {
-            ModHelper.Console.WriteLine("Taking 360 ScreenShot", MessageType.Success);
-            initializeCubeMap();
-            camera.RenderToCubemap(CubeMap, 63, Camera.MonoOrStereoscopicEye.Left);
+        private void ScreenShot(Camera.MonoOrStereoscopicEye eye) {
+            ModHelper.Console.WriteLine("Taking 360 ScreenShot from the " + eye + " eye", MessageType.Success);
+
+            camera.RenderToCubemap(CubeMap, 63, eye);
             RenderTexture equirect = new RenderTexture(CubeMap.width, CubeMap.height/2, 16, RenderTextureFormat.Default);
             CubeMap.ConvertToEquirect(equirect, Camera.MonoOrStereoscopicEye.Mono);
 
@@ -130,7 +120,7 @@ namespace OW360Camera
 
             byte[] bytes = screenshot.EncodeToPNG();
             string directory = ModHelper.Config.GetSettingsValue<string>("SavePath");
-            string path = directory + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + ".png";
+            string path = directory + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "." + eye + ".png";
             if (!Directory.Exists(directory))
                 Directory.CreateDirectory(directory);
             File.WriteAllBytes(path, bytes);
