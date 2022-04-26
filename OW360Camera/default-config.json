@@ -6,7 +6,6 @@
     "Left Eye" : true,
     "Right Eye" : false,
     "Resolution": 2048,
-    "SavePath": "./Pictures/",
-    "MaxGPUMemoryUsage (MB)": "4000"
+    "SavePath": "./Pictures/"
   }
 }

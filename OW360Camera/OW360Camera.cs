@@ -85,6 +85,10 @@ namespace OW360Camera
                 }
                 PostCapture();
             }
+
+            if (GetKeyDown(videoKey)){
+                toggle = !toggle;
+            }
         }
 
         private void PreCapture() {
