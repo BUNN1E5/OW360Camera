@@ -24,7 +24,7 @@ namespace OW360Camera
             }
         }
 
-        private Key screenshotKey, videoKey;
+        private Key screenshotKey;
         
         private RenderTexture CubeMap;
         private void Start(){
@@ -68,17 +68,11 @@ namespace OW360Camera
             player = GameObject.Find("Traveller_HEA_Player_v2");
         }
 
-        private void OnPostRender(){
+        public void Update(){
             if (GetKeyDown(screenshotKey)){
                 PreCapture();
                 initializeCubeMap();
-                if (ModHelper.Config.GetSettingsValue<bool>("Left Eye")){
-                    ScreenShot(Camera.MonoOrStereoscopicEye.Left);
-                }
-                
-                if (ModHelper.Config.GetSettingsValue<bool>("Right Eye")){
-                    ScreenShot(Camera.MonoOrStereoscopicEye.Right);
-                }
+                ScreenShot(camera, Camera.MonoOrStereoscopicEye.Left); //All I wanted was stereo Eyes ;(
                 PostCapture();
             }
         }
@@ -97,10 +91,12 @@ namespace OW360Camera
             GUIMode.SetRenderMode(GUIMode.RenderMode.FPS);
         }
 
-        private void ScreenShot(Camera.MonoOrStereoscopicEye eye) {
+        private void ScreenShot(Camera cam, Camera.MonoOrStereoscopicEye eye) {
             ModHelper.Console.WriteLine("Taking 360 ScreenShot from the " + eye + " eye", MessageType.Success);
-
-            camera.RenderToCubemap(CubeMap, 63, eye);
+            cam.stereoSeparation = ModHelper.Config.GetSettingsValue<float>("IPD");
+            cam.stereoEnabled
+            
+            cam.RenderToCubemap(CubeMap, 63, eye);
             RenderTexture equirect = new RenderTexture(CubeMap.width, CubeMap.height/2, 16, RenderTextureFormat.Default);
             CubeMap.ConvertToEquirect(equirect, Camera.MonoOrStereoscopicEye.Mono);
 
@@ -117,10 +113,13 @@ namespace OW360Camera
             byte[] bytes = screenshot.EncodeToPNG();
             string directory = ModHelper.Config.GetSettingsValue<string>("SavePath");
             string path = directory + DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss") + "." + eye + ".png";
-            if (!Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+            if (!Directory.Exists(directory)){
+                ModHelper.Console.WriteLine("Directory does not exist");
+                DirectoryInfo info = Directory.CreateDirectory(directory);
+                ModHelper.Console.WriteLine("Creating New Directory at " + info.FullName);
+            }
+
             File.WriteAllBytes(path, bytes);
-            
             ModHelper.Console.WriteLine("Saved ScreenShot to " + path, MessageType.Success);
         }
 

@@ -2,8 +2,6 @@
   "enabled": true,
   "settings": {
     "ScreenshotKey" : "C",
-    "Left Eye" : true,
-    "Right Eye" : false,
     "Resolution": 2048,
     "SavePath": "./Pictures/"
   }
