@@ -35,7 +35,6 @@ namespace OW360Camera
             ModHelper.Console.WriteLine($"{nameof(OW360Camera)} is loaded!", MessageType.Success);
             
             screenshotKey = (Key) System.Enum.Parse(typeof(Key), ModHelper.Config.GetSettingsValue<string>("ScreenshotKey").ToUpper()[0].ToString());
-            videoKey = (Key) System.Enum.Parse(typeof(Key), ModHelper.Config.GetSettingsValue<string>("VideoKey").ToUpper()[0].ToString());
             int resolution = Utils.NearestPowerOfTwo(ModHelper.Config.GetSettingsValue<int>("Resolution"));
             ModHelper.Console.WriteLine("Nearest power of 2 is " + resolution, MessageType.Info);
             initializeCubeMap();
