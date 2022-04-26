@@ -69,9 +69,6 @@ namespace OW360Camera
             player = GameObject.Find("Traveller_HEA_Player_v2");
         }
 
-
-        private bool toggle = false;
-
         private void OnPostRender(){
             if (GetKeyDown(screenshotKey)){
                 PreCapture();
@@ -84,10 +81,6 @@ namespace OW360Camera
                     ScreenShot(Camera.MonoOrStereoscopicEye.Right);
                 }
                 PostCapture();
-            }
-
-            if (GetKeyDown(videoKey)){
-                toggle = !toggle;
             }
         }
 
